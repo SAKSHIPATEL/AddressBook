@@ -46,10 +46,10 @@ function useradd(){
 		else echo "enter vaild mobile no"
 		fi
 
-	read -p "enter the disc " dic
-        if [[ $dic =~ $patn ]]
+	read -p "enter the district " disc
+        if [[ $disc =~ $patn ]]
 	then
-		dist[$distc]=$dic
+		dist[$distc]=$disc
                 ((distc++))
 	else echo "enter valid district"
 	fi
@@ -167,10 +167,10 @@ for ((i=0;i<${#first[@]};i++))
 }
 until [ $end -eq 1 ]
 do
-read -p "select the option 1)add 2)edit 3)delet  4)search " op
+read -p "select the option 1)add 2)edit 3)delete  4)search " op
 case $op in
 	1) useradd;;
-	2)	read -p "enter the name you wnat to edit " ename
+	2)	read -p "enter the name you want to edit " ename
 		userEdit $ename
 		;;
 	3)
