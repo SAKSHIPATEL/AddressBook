@@ -1,200 +1,131 @@
 #!/bin/bash -x
-firstc=0
-lastc=0
-emailc=0
-mobc=0
-distc=0
-statec=0
-pinc=0
-edit=0
-del=0
-end=0
-function useradd(){
-
-	 read -p "enter the first name " n
-           patn='^[a-zA-Z]{3,}$'
-		if [[ $n =~ $patn ]]
-		then
-		first[$firstc]=$n
-                ((firstc++))
-		else
-			echo "enter valid name"
-		fi
-          read -p "enter the last name " m
-          if [[ $m =~ $patn ]]
-	   then
-		last[$lastc]=$m
-                ((lastc++))
-	   else echo "enter valid name"
-	  fi
-
-	read -p "enter the email " e
-         pate='^[a-zA-Z0-9]{3,}[@][a-zA-Z]{3,}[.][a-z]{2,}$'
-		if [[ $e =~ $pate ]]
-		then
-		email[$emailc]=$e
-                ((emailc++))
-		else echo "enter vaild email"
-		fi
-
-	read -p "enter the mobile no " mob
-        patm='^(91[ ])*[0-9]{10}$'
-		if [[ $mob =~ $patm ]]
-		then
-		mobile[$mobc]=$mob
-                ((mobc++))
-		else echo "enter vaild mobile no"
-		fi
-
-	read -p "enter the district " disc
-        if [[ $disc =~ $patn ]]
-	then
-		dist[$distc]=$disc
-                ((distc++))
-	else echo "enter valid district"
-	fi
-
-
-	read -p "enter the state " sta
-        if [[ $sta =~ $patn ]]
-	then
-		state[$statec]=$sta
-                ((statec++))
-	else echo "enter the valid state"
-	fi
-
-
-	read -p "enter the pincode " p
-        patp='^[0-9]{6}$'
-	if [[ $p =~ $patp ]]
-	then
-		pin[$pinc]=$p
-                ((pinc++))
-	else echo "enter valid pin"
-	fi
-}
-function userEdit(){
- for ((i=0;i<${#first[@]};i++))
-                do
-                        if [[ ${first[$i]} == $1 ]]
-                        then
-                                edit=$i
-                        fi
-                done
-
-
-                read -p "enter the new email " nemail
-                pate='^[a-zA-Z0-9]{3,}[@][a-zA-Z]{3,}[.][a-z]{2,}$'
-		if [[ $nemail =~ $pate ]]
-		then
-			email[$edit]=$nemail
-		else echo "enter vaild email"
-		fi
-
-
-                read -p "enter the new phone no " nmob
-                patm='^[0-9]{10}$'
-		if [[ $nmob =~ $patm ]]
-		then
-			mobile[$edit]=$nmob
-                else
-			echo "enter vaild mobile number"
-		fi
-
-
-		read -p "enter the new dic " ndic
-                patd='^[a-zA-Z]$'
-		if [[ $ndic =~ $patd ]]
-		then
-		dist[$edit]=$ndic
-                else
-			echo "enter valid dictrict name"
-		fi
-
-
-		read -p "enter the new state " nsta
-                if [[ $sta =~ $patd ]]
-		then
-			state[$edit]=$nsta
-		else echo "enter the valid state name"
-		fi
-
-
-                read -p "enter the new pincode " np
-                patp='^[0-9]{6}$'
-		if [[ $np =~ $patp ]]
-		then
-			pin[$edit]=$np
-		else echo "enter valid pincode"
-		fi
-}
-function userDelete(){
- for ((i=0;i<${#first[@]};i++))
-                do
-                        if [[ ${first[$i]} == $1 ]]
-                        then
-                                del=$i
-                        else
-				echo "name not found"
-			fi
-                done
-                unset first[$del]
-                unset last[$del]
-                unset email[$del]
-                unset mobile[$del]
-                unset dist[$del]
-                unset state[$del]
-                unset pin[$del]
-}
-function userSearch(){
-for ((i=0;i<${#first[@]};i++))
-                do
-                        if [[ ${first[$i]} == $1 ]]
-                        then
-                                search=$i
-                        else
-                                echo "name not valid"
-
-                        fi
-                done
-                echo "the first name is ${first[$search]}"
-                echo "the last name is ${last[$search]}"
-                echo "the email is ${email[$search]}"
-                echo "the mobile no is ${mobile[$search]}"
-                echo "the dist name is ${dist[$search]}"
-                echo "The state is ${state[$search]}"
-                echo "The pincode is ${pin[$search]}"
-}
-until [ $end -eq 1 ]
+echo "welcome to adress book"
+declare -A address
+echo "maximum slots is 10"
+for ((i=0;i<10;i++))
 do
-read -p "select the option 1)add 2)edit 3)delete  4)search " op
-case $op in
-	1) useradd;;
-	2)	read -p "enter the name you want to edit " ename
-		userEdit $ename
-		;;
-	3)
-		 read -p "enter the name you want to delet " dname
-                userDelete $dname
-		;;
-	4)
-		 read -p "enter the name you want to search " sname
-                userSearch $sname
-		;;
-	*) echo "are you mad choose valid option"
-	;;
+address[$i,0]=" "
+done
+function Address(){
 
-esac
-echo ${first[@]}
-echo ${last[@]}
-echo ${email[@]}
-echo ${mobile[@]}
-echo ${dist[@]}
-echo ${state[@]}
-echo ${pin[@]}
-read -p "select 1)end 2)continue " rep
-if [ $rep -eq 1 ]
+        read -p "Enter First name:" Firstname
+        address[$1,0]=$Firstname
+         read -p "Enter Last name:" Lastname
+        address[$1,1]=$Lastname
+         read -p "Enter mob number:" Mobnum
+        address[$1,2]=$Mobnum
+        read -p "Enter City:" city
+        address[$1,3]=$city
+         read -p "Enter State:" state
+        address[$1,4]=$state
+         read -p "Enter pin:" pin
+        address[$1,5]=$pin
+}
+function display()
+{
+count=1
+for ((i=0;i<=5;i++))
+do
+echo "Slot:$count"
+	((count++))
+	for ((j=0;j<=6;j++)) do
+        echo  ${address[$i,$j]}
+    done
+done
+
+}
+function insert()
+{
+
+count=0
+stop=$1
+empty=" "
+for ((i=0;i<=10;i++))
+do
+if [[ " ${address[$i,0]} " =~ " $empty " ]]
 then
-	((end++))
+        Address $i
+        ((count++))
+        echo "next"
+else
+        continue
 fi
+if [ $count -eq $stop ]
+then
+        break
+fi
+done
+}
+#existing Address
+address[0,0]=Sakshi 
+address[0,1]=Patel
+address[0,2]=1234567894
+address[0,3]=chandrapur
+address[0,4]=maharashtra
+address[0,5]=442908
+address[1,0]=Shradha
+address[1,1]=Patel
+address[1,2]=9788005211
+address[1,3]=rajura
+address[1,4]=maharashtra
+address[1,5]=442908
+
+function edit()
+{
+position=$(($1-1))
+echo "1.First name 2.last name 3.mobile number 4.city 5.state 6.pin"
+read -p "select number from the above fields to edit" field
+case $field in
+        1)read -p "ReEnter Firstname:" edit
+        address[$position,0]=$edit;;
+        2)read -p "ReEnter Lastname:" edit
+        address[$position,1]=$edit;;
+        3)read -p "ReEnter Mobile number:" edit
+        address[$pos,2]=$edit;;
+        4)read -p "ReEnter city:" edit
+        address[$position,3]=$edit;;
+        5)read -p "ReEnter state:" edit
+        address[$position,4]=$edit;;
+        6)read -p "ReEnter pin:" edit
+        address[$position,5]=$edit;;
+        *);;
+esac
+}
+function delete()
+{
+
+read -p "enter slot number to delete" pos
+pos=$(($pos-1))
+echo "deleted Adress"
+for((i=0;i<6;i++))
+do
+	echo {$address[$pos,$i]}
+
+done
+for ((i=0;i<6;i++));do 
+address[$pos,$i]=' ';done
+}
+
+
+
+
+
+
+
+while [ true ]
+do
+echo "1.display the address 2.insert 3.edit 4.delete 5.exit"
+read -p  "enter your choices" choice
+case $choice in
+	1)display;;
+	2)read -p "how many adress will u add:" num
+		insert $num;;
+	3)read -p  "enter the adreess slot number  to edit :" e
+		edit $e;;
+	4)delete;;
+	5)exit;;
+	*)echo "enter your correct choice";;
+		
+esac
+
 done
